@@ -2,16 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AudioManager : MonoBehaviour
+public class AudioManager : Singleton<AudioManager>
 {
-    [SerializeField] [Range(1, 50)] int m_clipCount = 20;
+    [SerializeField] [Range(1, 50)] int m_channelCount = 20;
     [SerializeField] AudioData[] m_audioClips = null;
 
     AudioSource[] m_loopedSounds;
 
     private void Start()
     {
-        m_loopedSounds = new AudioSource[m_clipCount];
+        m_loopedSounds = new AudioSource[m_channelCount];
 
         for (int i = 0; i < m_loopedSounds.Length; ++i)
         {
@@ -73,7 +73,7 @@ public class AudioManager : MonoBehaviour
         if (!playIndefinitely || !data.loop)
         {
             float stopTime = duration <= 0.0f ? data.clip.length : duration;
-            StartCoroutine(StopClipAfterTime(stopTime, audio, false));
+            StartCoroutine(StopClipAfterTime(stopTime, audio, true));
         }
     }
 

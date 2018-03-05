@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Name: TurretFire
   m_EditorClassIdentifier: 
   clipName: TurretFire
-  clip: {fileID: 8300000, guid: 51e862643cd680d4094743e1d773a770, type: 3}
+  clip: {fileID: 8300000, guid: f6d1b28e8184c6043a2db2793f7964fb, type: 3}
   startPosition: {x: 0, y: 0, z: 0}
-  volume: 1
+  volume: 0.4
   pitch: 1
-  radius: 10
-  global: 1
-  loop: 1
-  playOnAwake: 1
+  radius: 40
+  global: 0
+  loop: 0
+  playOnAwake: 0
   output: {fileID: 243682405753150796, guid: c2f79e4e13e75c54b9f3854d01cc19bf, type: 2}

@@ -387,7 +387,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_speedAdjust: 0.2
   m_range: 20
-  m_fireRate: 0.1
+  m_fireRate: 0.5
   m_launchSpeed: 70
   m_cartridge: {fileID: 1111866429096092, guid: 306c55a29c8cee448a137c6903941017,
     type: 2}

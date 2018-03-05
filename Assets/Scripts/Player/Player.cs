@@ -29,7 +29,7 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        Collider[] c = Physics.OverlapSphere(m_groundTouchPoint.position, 0.2f, m_groundMask);
+        Collider[] c = Physics.OverlapSphere(m_groundTouchPoint.position, 0.1f, m_groundMask);
         m_onGround = c.Length > 0 ? true : false;
         
         if (Input.GetButtonDown("Jump") && CanJump())
@@ -48,11 +48,12 @@ public class Player : MonoBehaviour
         Vector3 velocity = Vector3.zero;
         velocity.z = Input.GetAxis("Vertical");
         velocity.x = Input.GetAxis("Horizontal");
-        velocity = velocity * m_speed * m_speedScale * Time.deltaTime;
-        velocity = OnGround ? velocity : velocity * 0.4f;
 
-        velocity = Camera.main.transform.rotation * velocity; // only make forward affected by camera
+        velocity = Camera.main.transform.rotation * velocity;
         velocity.y = 0.0f;
+        velocity.Normalize();
+        velocity = velocity * m_speed * m_speedScale * Time.deltaTime;
+        velocity = OnGround ? velocity : velocity * 0.6f;
         m_rigidbody.AddForce(velocity, ForceMode.Force);
 
         if (m_rigidbody.velocity.magnitude > 0.00001f)
@@ -78,7 +79,7 @@ public class Player : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if ((1 << collision.gameObject.layer) == m_groundMask.value)
+        if ((1 << collision.gameObject.layer) == m_groundMask.value && m_onGround)
         {
             m_currentJump = 0;
         }
