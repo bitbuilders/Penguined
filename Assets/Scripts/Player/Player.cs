@@ -52,11 +52,9 @@ public class Player : MonoBehaviour
         velocity = OnGround ? velocity : velocity * 0.6f;
 
         float angle = Camera.main.transform.rotation.eulerAngles.y;
-        Vector3 old = velocity;
         Quaternion camRot = Quaternion.AngleAxis(angle, Vector3.up);
         velocity = camRot * velocity;
         velocity.y = 0.0f;
-        //print(old + " | " + velocity);
         m_rigidbody.AddForce(velocity, ForceMode.Force);
 
         if (m_rigidbody.velocity.magnitude > 0.00001f)
