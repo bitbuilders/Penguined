@@ -19,62 +19,72 @@ public class Player : MonoBehaviour
     bool m_onGround;
 
     public bool OnGround { get { return m_onGround; } }
+    public int GearCount { get; set; }
+    public float Health { get; set; }
+    public bool Alive { get { return Health > 0.0f; } }
 
     void Start()
     {
         m_rigidbody = GetComponent<Rigidbody>();
 
         m_speedScale = m_rigidbody.mass * 50.0f;
+        ResetValues();
     }
 
     void Update()
     {
         Collider[] c = Physics.OverlapSphere(m_groundTouchPoint.position, 0.6f, m_groundMask);
         m_onGround = c.Length > 0 ? true : false;
-        
-        if (Input.GetButtonDown("Jump") && CanJump())
+
+        if (CanMove())
         {
-            Vector3 velocity = m_rigidbody.velocity;
-            velocity.y = 0.0f;
-            m_rigidbody.velocity = velocity;
-            float force = GetJumpForce();
-            m_rigidbody.AddForce(Vector3.up * force, ForceMode.Impulse);
-            ++m_currentJump;
+            if (Input.GetButtonDown("Jump") && CanJump())
+            {
+                Vector3 velocity = m_rigidbody.velocity;
+                velocity.y = 0.0f;
+                m_rigidbody.velocity = velocity;
+                float force = GetJumpForce();
+                m_rigidbody.AddForce(Vector3.up * force, ForceMode.Impulse);
+                ++m_currentJump;
+            }
         }
     }
 
     private void FixedUpdate()
     {
-        Vector3 velocity = Vector3.zero;
-        velocity.z = Input.GetAxis("Vertical");
-        velocity.x = Input.GetAxis("Horizontal");
-        velocity = velocity * m_speed * m_speedScale * Time.deltaTime;
-        velocity = OnGround ? velocity : velocity * 0.6f;
-
-        float angle = Camera.main.transform.rotation.eulerAngles.y;
-        Quaternion camRot = Quaternion.AngleAxis(angle, Vector3.up);
-        velocity = camRot * velocity;
-        velocity.y = 0.0f;
-        m_rigidbody.AddForce(velocity, ForceMode.Force);
-
-        if (m_rigidbody.velocity.magnitude > 0.00001f)
+        if (CanMove())
         {
-            Vector3 lookDir = m_rigidbody.velocity.normalized;
-            lookDir.y = 0.0f;
-            if (lookDir != Vector3.zero)
+            Vector3 velocity = Vector3.zero;
+            velocity.z = Input.GetAxis("Vertical");
+            velocity.x = Input.GetAxis("Horizontal");
+            velocity = velocity * m_speed * m_speedScale * Time.deltaTime;
+            velocity = OnGround ? velocity : velocity * 0.6f;
+
+            float angle = Camera.main.transform.rotation.eulerAngles.y;
+            Quaternion camRot = Quaternion.AngleAxis(angle, Vector3.up);
+            velocity = camRot * velocity;
+            velocity.y = 0.0f;
+            m_rigidbody.AddForce(velocity, ForceMode.Force);
+
+            if (m_rigidbody.velocity.magnitude > 0.00001f)
             {
-                Quaternion rotation = Quaternion.LookRotation(lookDir, Vector3.up);
-                transform.rotation = Quaternion.Lerp(transform.rotation, rotation, Time.deltaTime * m_turnSpeed);
+                Vector3 lookDir = velocity.normalized;
+                lookDir.y = 0.0f;
+                if (lookDir != Vector3.zero)
+                {
+                    Quaternion rotation = Quaternion.LookRotation(lookDir, Vector3.up);
+                    transform.rotation = Quaternion.Lerp(transform.rotation, rotation, Time.deltaTime * m_turnSpeed);
+                }
             }
-        }
 
-        if (m_rigidbody.velocity.y < 0.0f && !OnGround)
-        {
-            m_rigidbody.velocity += (Vector3.up * Physics.gravity.y) * (m_fallMultiplier - 1.0f) * Time.deltaTime;
-        }
-        else if (m_rigidbody.velocity.y > 0.0f && !OnGround)
-        {
-            m_rigidbody.velocity += (Vector3.up * Physics.gravity.y) * (m_jumpResistance - 1.0f) * Time.deltaTime;
+            if (m_rigidbody.velocity.y < 0.0f && !OnGround)
+            {
+                m_rigidbody.velocity += (Vector3.up * Physics.gravity.y) * (m_fallMultiplier - 1.0f) * Time.deltaTime;
+            }
+            else if (m_rigidbody.velocity.y > 0.0f && !OnGround)
+            {
+                m_rigidbody.velocity += (Vector3.up * Physics.gravity.y) * (m_jumpResistance - 1.0f) * Time.deltaTime;
+            }
         }
     }
 
@@ -83,6 +93,14 @@ public class Player : MonoBehaviour
         if ((1 << collision.gameObject.layer) == m_groundMask.value && m_onGround)
         {
             m_currentJump = 0;
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Gear"))
+        {
+            other.GetComponent<Gears>().Pickup(this);
         }
     }
 
@@ -102,5 +120,16 @@ public class Player : MonoBehaviour
     {
         return m_jumpForce - (10.0f * m_currentJump);
         //return m_jumpForce;
+    }
+
+    private void ResetValues()
+    {
+        GearCount = 0;
+        Health = 100.0f;
+    }
+
+    private bool CanMove()
+    {
+        return !Intro.Instance.IsPlaying;
     }
 }

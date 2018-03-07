@@ -26,12 +26,12 @@ public class AudioManager : Singleton<AudioManager>
         {
             if (clip.playOnAwake)
             {
-                PlayClip(clip.clipName, clip.startPosition, false);
+                PlayClip(clip.clipName, clip.startPosition, false, transform);
             }
         }
     }
 
-    public void PlayClip(string clipName, Vector3 position, bool playIndefinitely, float duration = 0.0f)
+    public void PlayClip(string clipName, Vector3 position, bool playIndefinitely, Transform parent, float duration = 0.0f)
     {
         AudioData data = GetClipFromName(clipName);
 
@@ -41,7 +41,7 @@ public class AudioManager : Singleton<AudioManager>
         }
         else
         {
-            PlaySound(data, position, playIndefinitely, duration);
+            PlaySound(data, position, playIndefinitely, parent, duration);
         }
     }
 
@@ -61,10 +61,10 @@ public class AudioManager : Singleton<AudioManager>
         }
     }
 
-    private void PlaySound(AudioData data, Vector3 position, bool playIndefinitely, float duration)
+    private void PlaySound(AudioData data, Vector3 position, bool playIndefinitely, Transform parent, float duration)
     {
         GameObject obj = new GameObject();
-        obj.transform.parent = transform;
+        obj.transform.parent = parent;
         obj.transform.position = position;
 
         AudioSource audio = obj.AddComponent<AudioSource>();

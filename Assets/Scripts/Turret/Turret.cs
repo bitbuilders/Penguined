@@ -45,7 +45,7 @@ public class Turret : MonoBehaviour
                 GameObject cartridge = Instantiate(m_cartridge, m_cartridgePoint.position, transform.rotation * spawnRot, m_cartridgePoint);
                 Destroy(cartridge, 2.0f);
 
-                AudioManager.Instance.PlayClip("TurretFire", transform.position, false);
+                AudioManager.Instance.PlayClip("TurretFire", transform.position, false, transform);
             }
         }
         else

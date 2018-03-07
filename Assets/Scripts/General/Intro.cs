@@ -22,18 +22,16 @@ public class Intro : Singleton<Intro>
     [SerializeField] Transform m_descriptionEnd = null;
 
     EnemyIntroData m_introData;
-    float m_canvasWidth;
+    bool m_isPlaying = false;
 
-    private void Start()
-    {
-        m_canvasWidth = m_introCanvas.GetComponent<RectTransform>().sizeDelta.x;
-    }
+    public bool IsPlaying { get { return m_isPlaying; } }
 
     public void PlayIntro(EnemyIntroData data)
     {
         // MAKE SURE WHEN PLAYING SOUND USE GLOBAL BECAUSE INTRO CAMERA ISN'T AUDIO LISTENER
-        m_introCamera.enabled = true;
         m_mainCamera.enabled = false;
+        m_introCamera.enabled = true;
+        m_isPlaying = true;
         m_introData = data;
         m_title.text = m_introData.title;
         m_description.text = m_introData.shortDescription;
@@ -60,6 +58,7 @@ public class Intro : Singleton<Intro>
 
         m_mainCamera.enabled = true;
         m_introCamera.enabled = false;
+        m_isPlaying = false;
         Destroy(enemy);
     }
 }
