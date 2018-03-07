@@ -35,7 +35,7 @@ public class Player : MonoBehaviour
     {
         Collider[] c = Physics.OverlapSphere(m_groundTouchPoint.position, 0.6f, m_groundMask);
         m_onGround = c.Length > 0 ? true : false;
-
+        
         if (CanMove())
         {
             if (Input.GetButtonDown("Jump") && CanJump())
