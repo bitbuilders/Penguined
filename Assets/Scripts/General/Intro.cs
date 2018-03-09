@@ -35,7 +35,7 @@ public class Intro : Singleton<Intro>
         m_introData = data;
         m_title.text = m_introData.title;
         m_description.text = m_introData.shortDescription;
-        GameObject firstEnemy = Instantiate(m_introData.enemies[0], m_startPosition.position, Quaternion.identity, m_introCanvas.transform);
+        GameObject firstEnemy = Instantiate(m_introData.enemies[0], m_startPosition.position, Quaternion.AngleAxis(140.0f, Vector3.up), m_introCanvas.transform);
         StartCoroutine(HandleIntroSequence(firstEnemy));
     }
 

@@ -58,6 +58,7 @@ public class Turret : MonoBehaviour
 
         if ((m_player.transform.position - transform.position).magnitude <= 3.0f)
         {
+            PlayerHUD.Instance.EnablePickupText();
             if (Input.GetButtonDown("Pickup") && m_player.TurretCount < m_player.TurretLimit)
             {
                 m_player.TurretCount++;

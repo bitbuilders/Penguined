@@ -121,11 +121,17 @@ public class Player : MonoBehaviour
         }
     }
 
+    bool firstOne = true;
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Gear"))
         {
             other.GetComponent<Gears>().Pickup(this);
+            if (firstOne)
+            {
+                PlayerHUD.Instance.SetInfoText("Press Start to open the pause/shop menu", 3.0f);
+                firstOne = false;
+            }
         }
     }
 

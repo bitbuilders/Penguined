@@ -17,4 +17,4 @@ MonoBehaviour:
   titleColor: {r: 0, g: 0, b: 0, a: 0}
   descriptionColor: {r: 0, g: 0, b: 0, a: 0}
   enemies:
-  - {fileID: 1140099348822326, guid: 363442627247f704a83213e034f7e2d5, type: 2}
+  - {fileID: 1552872556538746, guid: ce4a210c0e1e79b40944cd2e38d0aa17, type: 2}

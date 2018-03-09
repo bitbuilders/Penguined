@@ -13,15 +13,9 @@ public class UpgradeShop : Singleton<UpgradeShop>
     [SerializeField] Button m_resumeButton = null;
 
     bool m_inBaseMenu = false;
-    bool m_inMenus = false;
 
     public bool InBaseMenu { get { return m_inBaseMenu; } }
-    public bool InMenus { get { return m_inMenus; } }
-
-    private void Start()
-    {
-        m_inMenus = false;
-    }
+    public bool InMenus { get; set; }
 
     private void Update()
     {
@@ -71,12 +65,11 @@ public class UpgradeShop : Singleton<UpgradeShop>
     private void OnEnable()
     {
         SelectMenu();
-        m_inMenus = true;
     }
 
     private void OnDisable()
     {
-        m_inMenus = false;
+        InMenus = false;
     }
 
     public void SelectMenu()

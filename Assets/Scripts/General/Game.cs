@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Game : MonoBehaviour
 {
@@ -30,13 +31,20 @@ public class Game : MonoBehaviour
     private void PauseGame()
     {
         m_pauseMenu.SetActive(true);
+        UpgradeShop.Instance.InMenus = true;
         Time.timeScale = 0.0f;
     }
 
     private void UnPauseGame()
     {
         m_pauseMenu.SetActive(false);
+        UpgradeShop.Instance.InMenus = false;
         Time.timeScale = 1.0f;
+    }
+
+    public void LoadScene(string scene)
+    {
+        SceneManager.LoadScene(scene);
     }
 
     public void QuitGame()
