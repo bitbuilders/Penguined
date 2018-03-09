@@ -7,6 +7,7 @@ public class PlayerHUD : MonoBehaviour
 {
     [SerializeField] Player m_player = null;
     [SerializeField] TextMeshProUGUI m_gearCount = null;
+    [SerializeField] TextMeshProUGUI m_turretCount = null;
 
     private void Update()
     {
@@ -16,6 +17,7 @@ public class PlayerHUD : MonoBehaviour
             m_gearCount.text = score.ToString();
             StartCoroutine(BlinkText(m_gearCount, 0.25f));
         }
+        m_turretCount.text = m_player.TurretCount.ToString();
     }
 
     IEnumerator BlinkText(TextMeshProUGUI text, float duration)

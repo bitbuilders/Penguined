@@ -53,9 +53,11 @@ GameObject:
   - component: {fileID: 4207094557670332}
   - component: {fileID: 65525863008760930}
   - component: {fileID: 114848290142732978}
+  - component: {fileID: 54793606374282870}
+  - component: {fileID: 135512670359135978}
   m_Layer: 0
   m_Name: Turret
-  m_TagString: Untagged
+  m_TagString: Turret
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -172,7 +174,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1296660247144722}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.04, y: 0.32098627, z: 2.93}
+  m_LocalPosition: {x: -51.280537, y: 0.32098627, z: -55.44816}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4425988783393408}
@@ -362,6 +364,21 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1594593385163752}
   m_Mesh: {fileID: 4300002, guid: 39499c077720e1147b30853d7ac85095, type: 3}
+--- !u!54 &54793606374282870
+Rigidbody:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1296660247144722}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 112
+  m_CollisionDetection: 0
 --- !u!65 &65525863008760930
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -396,3 +413,18 @@ MonoBehaviour:
   - {fileID: 4484937670528800}
   - {fileID: 4476625882281328}
   - {fileID: 4123175113255652}
+  m_groundMask:
+    serializedVersion: 2
+    m_Bits: 256
+--- !u!135 &135512670359135978
+SphereCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1296660247144722}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 3
+  m_Center: {x: 0, y: 1, z: 0}

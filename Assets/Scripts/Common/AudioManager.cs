@@ -110,7 +110,8 @@ public class AudioManager : Singleton<AudioManager>
         yield return new WaitForSeconds(duration);
         if (destroy)
         {
-            Destroy(source.gameObject);
+            if (source)
+                Destroy(source.gameObject);
         }
         else
         {

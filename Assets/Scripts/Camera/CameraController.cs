@@ -48,8 +48,6 @@ public class CameraController : MonoBehaviour
 
     void LateUpdate()
     {
-        Vector3 direction = m_target.transform.position - transform.position;
-
         Vector3 dir = m_newPosition - m_target.transform.position;
         dir.y = 0.0f;
         Vector3 offset = dir.normalized * m_spaceFromTarget;
@@ -57,7 +55,8 @@ public class CameraController : MonoBehaviour
         targetPosition.y = m_target.transform.position.y + m_verticalOffset;
         transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * m_attentiveness);
 
-        Quaternion rotation = Quaternion.LookRotation(direction.normalized, Vector3.up);
+        Vector3 lookDir = m_target.transform.position + Vector3.up * 2.0f - transform.position;
+        Quaternion rotation = Quaternion.LookRotation(lookDir.normalized, Vector3.up);
         transform.rotation = Quaternion.Lerp(transform.rotation, rotation, Time.deltaTime * m_lockIntensity);
     }
 }

@@ -11,7 +11,9 @@ public class Turret : MonoBehaviour
     [SerializeField] GameObject m_cartridge = null;
     [SerializeField] Transform m_cartridgePoint = null;
     [SerializeField] Transform[] m_firePoints = null;
+    [SerializeField] LayerMask m_groundMask;
 
+    Player m_player = null;
     float m_fireTime = 0.0f;
     int m_barrelIndex = 0;
     bool m_targetInRange = false;
@@ -23,13 +25,14 @@ public class Turret : MonoBehaviour
         m_targetInRange = (player.transform.position - transform.position).magnitude < m_range;
         if (m_targetInRange)
         {
-            Vector3 targetPosition = player.transform.position + Vector3.up * -0.5f - transform.position;
+            Vector3 targetPosition = player.transform.position + Vector3.up * 0.75f - transform.position;
             Rigidbody playerBody = player.GetComponent<Rigidbody>();
             Vector3 offset = playerBody.velocity * m_speedAdjust;
             targetPosition += offset;
             Quaternion rotation = Quaternion.LookRotation(targetPosition.normalized);
             transform.rotation = Quaternion.Lerp(transform.rotation, rotation, Time.deltaTime * 10.0f);
 
+            if (m_player) m_fireRate = m_player.TurretSpeed;
             m_fireTime += Time.deltaTime;
             if (m_fireTime >= m_fireRate)
             {
@@ -52,6 +55,23 @@ public class Turret : MonoBehaviour
         {
             m_fireTime = 0.0f;
         }
+
+        if ((m_player.transform.position - transform.position).magnitude <= 3.0f)
+        {
+            if (Input.GetButtonDown("Pickup") && m_player.TurretCount < m_player.TurretLimit)
+            {
+                m_player.TurretCount++;
+                Destroy(gameObject);
+            }
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if ((1 << collision.gameObject.layer) == m_groundMask.value)
+        {
+            Destroy(GetComponent<Rigidbody>());
+        }
     }
 
     private GameObject GetNearestObject(string tag)
@@ -72,5 +92,25 @@ public class Turret : MonoBehaviour
         }
 
         return nearest;
+    }
+
+    public void RegisterPlayer(Player player, bool startup)
+    {
+        m_player = player;
+        if (startup)
+        {
+            StartCoroutine(ScaleUp());
+        }
+    }
+
+    IEnumerator ScaleUp()
+    {
+        for (float i = 0.0f; i < 1.0f; i += Time.deltaTime)
+        {
+            transform.localScale = new Vector3(i, i, i);
+            yield return null;
+        }
+
+        transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
     }
 }
