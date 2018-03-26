@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class Game : MonoBehaviour
+public class Game : Singleton<Game>
 {
     [SerializeField] GameObject m_pauseMenu = null;
     [SerializeField] GameObject m_helpWindow = null;

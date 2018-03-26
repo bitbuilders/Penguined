@@ -20,7 +20,7 @@ public class Turret : MonoBehaviour
 
     private void Update()
     {
-        GameObject player = GetNearestObject("Player");
+        GameObject player = GetNearestObject("Enemy");
 
         m_targetInRange = (player.transform.position - transform.position).magnitude < m_range;
         if (m_targetInRange)

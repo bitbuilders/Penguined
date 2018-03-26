@@ -12,6 +12,7 @@ public class Player : MonoBehaviour
     [SerializeField] [Range(0.0f, 10.0f)] float m_turretSpeed = 0.5f;
     [SerializeField] [Range(1, 10)] int m_bonusJumps = 2;
     [SerializeField] GameObject m_turret = null;
+    [SerializeField] BoxCollider m_attackHitbox = null;
     [SerializeField] Transform m_turretThrowLocation = null;
     [SerializeField] Transform m_turretContainer = null;
     [SerializeField] Transform m_groundTouchPoint = null;
@@ -28,7 +29,10 @@ public class Player : MonoBehaviour
 
     Animator m_animator;
     Rigidbody m_rigidbody;
+    Vector3 m_checkpoint;
     float m_speedScale;
+    float m_checkpointRate = 20.0f;
+    float m_checkpointTime = 0.0f;
     int m_currentJump = 0;
     bool m_onGround;
 
@@ -39,7 +43,9 @@ public class Player : MonoBehaviour
 
         m_speedScale = m_rigidbody.mass * 50.0f;
         ResetValues();
-        GearCount = 5;
+
+        m_checkpoint = transform.position;
+        Health = 100.0f;
     }
 
     void Update()
@@ -49,6 +55,13 @@ public class Player : MonoBehaviour
         
         if (CanMove())
         {
+            m_checkpointTime += Time.deltaTime;
+            if (m_checkpointTime >= m_checkpointRate)
+            {
+                m_checkpoint = transform.position;
+                m_checkpointTime = 0.0f;
+            }
+
             if (Input.GetButtonDown("Jump") && CanJump())
             {
                 Vector3 velocity = m_rigidbody.velocity;
@@ -57,6 +70,10 @@ public class Player : MonoBehaviour
                 float force = GetJumpForce();
                 m_rigidbody.AddForce(Vector3.up * force, ForceMode.Impulse);
                 ++m_currentJump;
+            }
+            if (!Alive)
+            {
+                Respawn();
             }
         }
     }
@@ -129,9 +146,30 @@ public class Player : MonoBehaviour
             other.GetComponent<Gears>().Pickup(this);
             if (firstOne)
             {
-                PlayerHUD.Instance.SetInfoText("Press Start to open the pause/shop menu", 3.0f);
+                PlayerHUD.Instance.SetInfoText("Press Start to open the pause/shop menu", 5.0f);
                 firstOne = false;
             }
+        }
+        else if (other.CompareTag("Death"))
+        {
+            Respawn();
+        }
+        else if (other.CompareTag("Enemy"))
+        {
+            if (!other.GetComponent<EnemyPenguin>().m_playedIntro)
+            {
+                other.GetComponent<EnemyPenguin>().PlayIntro();
+            }
+        }
+        else if (other.CompareTag("IceBall"))
+        {
+            //print(Health);
+            Health -= 20.0f;
+            Destroy(other.GetComponent<BoxCollider>());
+        }
+        else if (other.CompareTag("Finish"))
+        {
+            Game.Instance.LoadScene("MainMenu");
         }
     }
 
@@ -178,5 +216,23 @@ public class Player : MonoBehaviour
 
             TurretCount--;
         }
+    }
+
+    public void ThrowIceball()
+    {
+        m_attackHitbox.enabled = true;
+        StartCoroutine(DisableHitbox());
+    }
+
+    IEnumerator DisableHitbox()
+    {
+        yield return new WaitForSeconds(0.1f);
+        m_attackHitbox.enabled = false;
+    }
+
+    public void Respawn()
+    {
+        ResetValues();
+        transform.position = m_checkpoint;
     }
 }

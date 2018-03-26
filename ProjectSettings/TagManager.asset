@@ -6,6 +6,9 @@ TagManager:
   tags:
   - Gear
   - Turret
+  - Death
+  - Enemy
+  - IceBall
   layers:
   - Default
   - TransparentFX

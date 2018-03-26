@@ -35,6 +35,7 @@ public class UpgradeShop : Singleton<UpgradeShop>
             {
                 m_helpWindow.SetActive(false);
                 m_upgradeWindow.SetActive(true);
+                m_resumeButton.Select();
             }
         }
 
@@ -54,11 +55,11 @@ public class UpgradeShop : Singleton<UpgradeShop>
                     m_player.GearCount -= 3;
                 }
             }
-            if (Input.GetButtonDown("Pickup") && m_player.GearCount >= 1)
-            {
-                m_player.PotionCount++;
-                m_player.GearCount--;
-            }
+            //if (Input.GetButtonDown("Pickup") && m_player.GearCount >= 1)
+            //{
+            //    m_player.PotionCount++;
+            //    m_player.GearCount--;
+            //}
         }
     }
 
